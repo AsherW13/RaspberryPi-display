@@ -1,20 +1,27 @@
 body {
-    font-family: sans-serif;
-    text-align: center;
-    margin-top: 30px;
-  }
-  
-  #matrix {
-    display: grid;
-    grid-template-columns: repeat(8, 30px);
-    grid-template-rows: repeat(8, 30px);
-    gap: 2px;
-    justify-content: center;
-  }
-  
-  .pixel {
-    width: 30px;
-    height: 30px;
-    background-color: #000;
-  }
-  
+  font-family: sans-serif;
+  text-align: center;
+  background: #f5f5f5;
+  padding: 2rem;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(8, 30px);
+  grid-template-rows: repeat(8, 30px);
+  gap: 4px;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.pixel {
+  width: 30px;
+  height: 30px;
+  background-color: #ddd;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.pixel.active {
+  background-color: #ff3c3c; /* red "on" color */
+}
