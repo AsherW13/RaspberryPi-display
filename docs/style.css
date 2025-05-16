@@ -1,34 +1,12 @@
-body {
-  font-family: sans-serif;
-  text-align: center;
-  background: #f5f5f5;
-  padding: 2rem;
+.pixel {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  display: inline-block;
+  background-color: black;
 }
-
 #grid {
   display: grid;
-  grid-template-columns: repeat(8, 30px);
-  grid-template-rows: repeat(8, 30px);
-  gap: 4px;
-  justify-content: center;
-  margin-top: 2rem;
-}
-
-.pixel {
-  width: 30px;
-  height: 30px;
-  background-color: #ddd;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.pixel.active {
-  background-color: #ff3c3c; /* red "on" color */
-}
-
-select, input {
-  font-size: 1rem;
-  padding: 0.5rem;
-  margin: 1rem 0;
-  width: 200px;
+  grid-template-columns: repeat(8, 20px);
+  gap: 2px;
 }

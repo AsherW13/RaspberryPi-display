@@ -1,6 +1,7 @@
+import eventlet
+eventlet.monkey_patch()
 from flask import Flask, send_from_directory
 from flask_socketio import SocketIO
-import os
 
 app = Flask(__name__, static_folder="../docs")
 socketio = SocketIO(app, cors_allowed_origins="*")
