@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: pixel-socketio
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app.server:app -c gunicorn_config.py
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: FLASK_ENV
+        value: production
