@@ -1,10 +1,8 @@
-import eventlet
-eventlet.monkey_patch()
 from flask import Flask, send_from_directory
 from flask_socketio import SocketIO
 
 app = Flask(__name__, static_folder="../docs")
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent')
 
 @app.route('/')
 def index():
