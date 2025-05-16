@@ -15,4 +15,4 @@ def static_files(path):
 @socketio.on('pixel_update')
 def handle_pixel(data):
     print(f"Relaying pixel: {data}")
-    socketio.emit('pixel_update', data, broadcast=True)
+    socketio.emit('pixel_update', data)
