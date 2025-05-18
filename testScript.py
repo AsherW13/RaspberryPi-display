@@ -5,29 +5,76 @@ import random
 sense = SenseHat()
 sense.clear()
 
+
+set_pixels = set()
 pixel_state = [[False for _ in range(8)] for _ in range (8)]
 
 x = 0
 y = 0
-color = (160, 32, 240)
+move_color = (255, 255, 255)
 i = 0
-try:
-	while(i < 20):
-		x = random.randint(0, 7)
-		y = random.randint(0, 7)
-		if not pixel_state[y][x]:
-			color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-			pixel_state[y][x] = True
-			sense.set_pixel(x,y, color)
-			print(f"setting pixel ({x},{y})")
-			time.sleep(3)
-		else:
-			print(f"pixel ({x},{y}) already set")
-			continue
-		i += 1
+
+def set_pixel():
+	for lx, ly in set_pixels:
+		temp_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+		sense.set_pixel(lx, ly, temp_color)
+
+def update_display(x, y, color):
 	sense.clear()
+	set_pixel()
+	sense.set_pixel(x, y, color)
+	
+def move(event):
+	global x, y, color
+	if event.action == 'pressed':
+		if event.direction == 'up' and y > 0:
+			y -= 1
+		elif event.direction == 'down' and y < 7:
+			y += 1
+		elif event.direction == 'left' and x > 0:
+			x -= 1
+		elif event.direction == 'right' and x < 7:
+			x += 1
+		elif event.direction == 'middle':
+			set_pixels.add((x, y))
+			set_pixel()
+			return
+		else:
+			print(f"cannot go out of bounds\n")
+		update_display(x,y, move_color)
+	
+
+sense.stick.direction_up = move
+sense.stick.direction_down = move
+sense.stick.direction_left = move
+sense.stick.direction_right = move
+sense.stick.direction_middle = move
+
+update_display(x,y, move_color)
+
+
+try:
+	while True:
+		time.sleep(0.1)
 except KeyboardInterrupt:
 	sense.clear()
+#try:
+#	while(i < 20):
+#		x = random.randint(0, 7)
+#		y = random.randint(0, 7)
+#		if not pixel_state[y][x]:
+#			color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+#			pixel_state[y][x] = True
+#			sense.set_pixel(x,y, color)
+#			print(f"setting pixel ({x},{y})")
+#			time.sleep(3)
+#		else:
+#			print(f"pixel ({x},{y}) already set")
+#			continue
+#		i += 1
+#	sense.clear()
+#except KeyboardInterrupt:
+#	sense.clear()
 
 #try:
 #	while True:
