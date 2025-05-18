@@ -7,12 +7,12 @@ sense.clear()
 
 
 set_pixels = {}
-pixel_state = [[False for _ in range(8)] for _ in range (8)]
+#pixel_state = [[False for _ in range(8)] for _ in range (8)]
 
 x = 0
 y = 0
 move_color = (255, 255, 255)
-i = 0
+#i = 0
 press_time = 0
 def set_pixel():
 	for (lx, ly), color in set_pixels.items():
@@ -43,8 +43,6 @@ def move(event):
 			else:
 				temp_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 				set_pixels[(x,y)] = temp_color 
-				set_pixel()
-				return
 			press_time = now
 		else:
 			print(f"cannot go out of bounds\n")
