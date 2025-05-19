@@ -16,13 +16,26 @@
       <option value="">-- Select --</option>
       <option value="Displaying Smily Face">Smily</option>
       <option value="Displaying Sad Face">Sad</option>
+      <option value="Displaying Wink Face">Wink</option>
     </select>
   </div>
 
-  <br>
+  <h1>RGB Color Picker</h1>
+  <div class="slider-container" id="colorBox"></div>
 
-  <label for="output">Selection Output:</label>
-  <input type="text" id="output" readonly>
+  <div class="slider-container">
+    <label for="red">Red: <span id="redValue">0</span></label>
+    <input type="range" id="red" min="0" max="255" value="0">
+  </div>
+  <div class="slider-container">
+    <label for="green">Green: <span id="greenValue">0</span></label>
+    <input type="range" id="green" min="0" max="255" value="0">
+  </div>
+  <div class="slider-container">
+    <label for="blue">Blue: <span id="blueValue">0</span></label>
+    <input type="range" id="blue" min="0" max="255" value="0">
+  </div>
+  <br>
 
 
   <div id="grid"></div>
