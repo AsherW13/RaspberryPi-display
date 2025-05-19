@@ -16,3 +16,6 @@ def static_files(path):
 def handle_pixel(data):
     print(f"Relaying pixel: {data}")
     socketio.emit('pixel_update', data)
+
+if __name__ == "__main__":
+    socketio.run(app, debug=True)
