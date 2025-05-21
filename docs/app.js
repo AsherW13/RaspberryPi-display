@@ -2,12 +2,55 @@ const socket = io(
   location.hostname === "localhost" ? "http://localhost:5000" : "https://raspberrypi-display.onrender.com"
 );
 const grid = document.getElementById("grid");
+const clearButton = document.getElementById("clearBoard");
 
 for (let i = 0; i < 64; i++) {
   const pixel = document.createElement("div");
   pixel.classList.add("pixel");
+
+  const x = i % 8;
+  const y = Math.floor(i / 8);
+
+  pixel.addEventListener("click", () => {
+    const red = parseInt(redSlider.value);
+    const green = parseInt(greenSlider.value);
+    const blue = parseInt(blueSlider.value);
+    const color = [red, green, blue];
+
+    pixel.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+
+    socket.emit("pixel_update", {
+      x, y, color
+    });
+  });
+
+  pixel.addEventListener("dblclick", () => {
+    pixel.style.backgroundColor = "white";
+    socket.emit("pixel_update", {
+      x, y, color: [255, 255, 255]
+    });
+  });
   grid.appendChild(pixel);
 }
+
+clearButton.addEventListener("click", async () => {
+  const pixels = document.querySelectorAll(".pixel");
+
+  for (let i = 0; i < pixels.length; i++) {
+    const pixel = pixels[i];
+    const x = i % 8;
+    const y = Math.floor(i / 8);
+
+    pixel.style.backgroundColor = "white";
+
+    socket.emit("pixel_update", {
+      x, y, color: [255, 255, 255]
+    });
+
+    // delay for the raspberry pi to keep up in its sense hat display state
+    await new Promise(resolve => setTimeout(resolve, 20));
+  }
+});
 
 socket.on("pixel_update", ({ x, y, color }) => {
   const index = y * 8 + x;
