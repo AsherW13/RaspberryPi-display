@@ -1,12 +1,14 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, send_file
 from flask_socketio import SocketIO
 from sense_hat import SenseHat
 import time
 import random
 import threading
+import os
+import json
 
 app = Flask(__name__, static_folder="../docs")
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent')
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 sense = SenseHat()
 sense.clear()
@@ -76,6 +78,10 @@ def index():
 @app.route('/<path:path>')
 def static_files(path):
     return send_from_directory(app.static_folder, path)
+    
+@app.route("/ngrok_url.json")
+def ngrok_url():
+    return send_file("ngrok_url.json")
 
 @socketio.on('pixel_update')
 def handle_pixel(data):
@@ -87,6 +93,6 @@ def handle_pixel(data):
     sense.set_pixel(x, y, color)
     socketio.emit('pixel_update', data)
 
-threading.Thread(target=create_Joystick, daemon=true).start()
+threading.Thread(target=create_Joystick, daemon=True).start()
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000)
