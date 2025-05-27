@@ -1,17 +1,11 @@
-import eventlet
-eventlet.monkey_patch()
-from flask import Flask, send_from_directory, send_file
-from flask_socketio import SocketIO
+
 from sense_hat import SenseHat
 
 import time
 import random
 import os
 import json
-import threading
-
-app = Flask(__name__, static_folder="../docs")
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+from threading import Thread
 
 sense = SenseHat()
 sense.clear()
@@ -77,28 +71,41 @@ def create_Joystick():
         sense.clear()
 # frontend web server routes 
 
-@app.route('/')
-def index():
-    return send_from_directory(app.static_folder, "index.html")
-
-@app.route('/<path:path>')
-def static_files(path):
-    return send_from_directory(app.static_folder, path)
-    
-@app.route("/ngrok_url.json")
-def ngrok_url():
-    return send_file("ngrok_url.json")
-
-@socketio.on('pixel_update')
-def handle_pixel(data):
-    x = data['x']
-    y = data['y']
-    color = tuple(data['color'])
-    print(f"frontend pixel: ({x}, {y}) = {color}")
-    set_pixels[(x, y)] = color
-    sense.set_pixel(x, y, color)
-    socketio.emit('pixel_update', data)
-
 if __name__ == "__main__":
-    threading.Thread(target=create_Joystick, daemon=True).start()
+    joystick_thread = Thread(target=create_Joystick, daemon=True)
+    joystick_thread.start()
+    
+    import eventlet
+    eventlet.monkey_patch()
+    
+    from flask import Flask, send_from_directory, send_file
+    from flask_socketio import SocketIO
+    
+    
+    app = Flask(__name__, static_folder="../docs")
+    socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+    
+    @app.route('/')
+    def index():
+        return send_from_directory(app.static_folder, "index.html")
+
+    @app.route('/<path:path>')
+    def static_files(path):
+            return send_from_directory(app.static_folder, path)
+        
+    @app.route("/ngrok_url.json")
+    def ngrok_url():
+            return send_file("ngrok_url.json")
+
+    @socketio.on('pixel_update')
+    def handle_pixel(data):
+        x = data['x']
+        y = data['y']
+        color = tuple(data['color'])
+        print(f"frontend pixel: ({x}, {y}) = {color}")
+        set_pixels[(x, y)] = color
+        sense.set_pixel(x, y, color)
+        socketio.emit('pixel_update', data)
+
+    
     socketio.run(app, host="0.0.0.0", port=5000)
