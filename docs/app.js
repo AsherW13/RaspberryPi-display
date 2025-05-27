@@ -1,6 +1,4 @@
-const socket = io(
-  location.hostname === "localhost" ? "http://localhost:5000" : "https://raspberrypi-display.onrender.com"
-);
+const socket = io();
 const grid = document.getElementById("grid");
 const clearButton = document.getElementById("clearBoard");
 
