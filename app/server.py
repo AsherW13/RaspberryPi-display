@@ -1,3 +1,4 @@
+
 from flask import Flask, send_from_directory, send_file
 from flask_socketio import SocketIO
 from sense_hat import SenseHat
@@ -105,4 +106,4 @@ def handle_pixel(data):
 if __name__ == "__main__":
     threading.Thread(target=create_Joystick, daemon=True).start()
     threading.Thread(target=display_refresh, daemon=True).start()
-    socketio.run(app, host="0.0.0.0", port=5000)
+    socketio.run(app, host="0.0.0.0", port=5000, allow_unsafe_werkzeug=True)
