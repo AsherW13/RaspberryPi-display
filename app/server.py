@@ -99,9 +99,14 @@ def handle_pixel(data):
     y = data['y']
     color = tuple(data['color'])
     print(f"frontend pixel: ({x}, {y}) = {color}")
-    set_pixels[(x, y)] = color
-    sense.set_pixel(x, y, color)
-    socketio.emit('pixel_update', data)
+    if color == (255, 255, 255):
+        if (x,y) in set_pixels:
+            del set_pixels[(x, y)]
+        set_pixel()
+    else:
+        set_pixels[(x, y)] = color
+        sense.set_pixel(x, y, color)
+        socketio.emit('pixel_update', data)
 
 if __name__ == "__main__":
     threading.Thread(target=create_Joystick, daemon=True).start()
